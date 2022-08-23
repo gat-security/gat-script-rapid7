@@ -3,11 +3,14 @@
 
 Conversor de reports ```.xml``` do Rapid7 para arquivos ```.csv``` aceitos pelo Custom Parser do GAT Core.
 
+Conheça API pública GAT Core
+(https://documenter.getpostman.com/view/13656974/Uyxeq9LN?version=latest)
+
 ## Pré Requisitos
 
 * Python 3.x
 * Conta ativa no GAT
-* Chave de API do GAT (https://documenter.getpostman.com/view/7858992/TzCMdoMv?version=latest)
+* Chave de API do GAT (https://help.gat.digital/pt-BR/articles/5814793-como-obter-a-chave-de-api-gat-core) 
 * Biliotecas em ```requirements.txt```
 
 
