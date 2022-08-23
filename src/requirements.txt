@@ -1,0 +1,4 @@
+DateTime>=4.4
+elementpath>=2.5.3
+defusedxml==0.7.1
+requests>=2.26.0

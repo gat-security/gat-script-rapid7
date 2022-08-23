@@ -1,0 +1,9 @@
+{
+  "url": "exemplo.gat.digital",
+  "bearer": "d3f8666c-a6af-4a94-98b9-f15000000000",
+  "templates":{
+    "NexposeReportV1": "Template_NameNRv1",
+    "NexposeReportV2": "Template_NameNRv2",
+    "QualysGuard": "Template_NameQG"
+  }
+}
