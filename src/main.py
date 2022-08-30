@@ -21,14 +21,16 @@ log_file = open("./src/logs/log_{}.txt".format(hora_log), "a", newline='')
 url = config['url']
 bearer = config['bearer']
 resource = '/app/vulnerability/upload/api/Rapid7/'
-resources = [config['templates']['NexposeReportV1'], config['templates']['NexposeReportV2'],
-             config['templates']['QualysGuard']]
+resources = [config['templates']['InsightVM']]
 
 # Files
 for input in os.listdir(directory):
     f = os.path.join(directory, input)
 
     input_split = input.split('.')
+    if input_split[1] != 'xml':
+        continue
+
     output_name = input_split[0] + '.csv'
     file_and_path = './src/csvs/' + output_name
 
@@ -251,22 +253,26 @@ for input in os.listdir(directory):
                                     issue_fail += 1
 
                             elif version == "1.0":
-                                header = ['address', 'port', 'protocol', 'test_status', 'id', 'title', 'severity',
-                                          'cvssScore', 'published',
-                                          'added', 'modified', 'description',
+
+                                header = ['address', 'port', 'protocol', 'os', 'certainty', 'test_status', 'id',
+                                          'title', 'severity',
+                                          'cvssScore', 'malware', 'exploit_id', 'exploit_title', 'published', 'added',
+                                          'modified', 'riskScore', 'description',
                                           'tags', 'solution']
 
                                 for ref in range(len(ref_header_url)):
                                     header.append(ref_header_titulo[ref])
                                     header.append(ref_header_url[ref])
 
-                                data = [address, port, protocol, test_status, root[j][vulnerability].attrib['id'],
+                                data = [address, port, protocol, "Sistema Operacional não cadastrado",
+                                        "", test_status, root[j][vulnerability].attrib['id'],
                                         root[j][vulnerability].attrib['title'],
                                         sev[int(root[j][vulnerability].attrib['severity'])],
-                                        root[j][vulnerability].attrib['cvssScore'],
+                                        root[j][vulnerability].attrib['cvssScore'], '', '',
+                                        '',
                                         published_date,
                                         added_date,
-                                        modified_date, description, tags,
+                                        modified_date, "", description, tags,
                                         solution]
 
                                 for ref in range(len(reference_url)):
@@ -340,22 +346,24 @@ for input in os.listdir(directory):
                                 issue_fail += 1
 
                         elif version == "1.0":
-                            header = ['address', 'port', 'protocol', 'test_status', 'id', 'title', 'severity',
-                                      'cvssScore', 'published',
-                                      'added', 'modified', 'description',
+                            header = ['address', 'port', 'protocol', 'os', 'certainty', 'test_status', 'id',
+                                      'title', 'severity',
+                                      'cvssScore', 'malware', 'exploit_id', 'exploit_title', 'published', 'added',
+                                      'modified', 'riskScore', 'description',
                                       'tags', 'solution']
 
                             for ref in range(len(ref_header_url)):
                                 header.append(ref_header_titulo[ref])
                                 header.append(ref_header_url[ref])
 
-                            data = [address, port, protocol, test_status, root[j][vulnerability].attrib['id'],
+                            data = [address, port, protocol, "Sistema Operacional não cadastrado", "",
+                                    test_status, root[j][vulnerability].attrib['id'],
                                     root[j][vulnerability].attrib['title'],
                                     sev[int(root[j][vulnerability].attrib['severity'])],
-                                    root[j][vulnerability].attrib['cvssScore'],
+                                    root[j][vulnerability].attrib['cvssScore'], '', '', '',
                                     published_date,
                                     added_date,
-                                    modified_date, description, tags,
+                                    modified_date, "", description, tags,
                                     solution]
 
                             for ref in range(len(reference_url)):
@@ -378,7 +386,7 @@ for input in os.listdir(directory):
 
             vulnerability += 1
         if version == "2.0":
-            resource = '/app/vulnerability/upload/api/{}/'.format(resources[1])
+            resource = '/app/vulnerability/upload/api/{}/'.format(resources[0])
         else:
             resource = '/app/vulnerability/upload/api/{}/'.format(resources[0])
         print("Total NexposeReport (" + input + "):", issue)
@@ -387,6 +395,16 @@ for input in os.listdir(directory):
             log_file.write("\n\tApontamentos não convertidos: {}\n\n".format(issue_fail))
 
     elif root.tag == "SCAN":  # QUALYS
+        ref_header_titulo = ['ref_titulo_1', 'ref_titulo_2', 'ref_titulo_3', 'ref_titulo_4', 'ref_titulo_5',
+                             'ref_titulo_6', 'ref_titulo_7', 'ref_titulo_8', 'ref_titulo_9', 'ref_titulo_10',
+                             'ref_titulo_11', 'ref_titulo_12', 'ref_titulo_13', 'ref_titulo_14', 'ref_titulo_15',
+                             'ref_titulo_16']
+
+        ref_header_url = ['ref_url_1', 'ref_url_2', 'ref_url_3', 'ref_url_4', 'ref_url_5',
+                          'ref_url_6', 'ref_url_7', 'ref_url_8', 'ref_url_9', 'ref_url_10',
+                          'ref_url_11', 'ref_url_12', 'ref_url_13', 'ref_url_14', 'ref_url_15',
+                          'ref_url_16']
+
         print("Iniciando QualysGuard...")
         vulnerability = 0
 
@@ -435,11 +453,20 @@ for input in os.listdir(directory):
                     result = result.replace("\n", "")
 
                     # Write row
-                    header = ['address', 'port', 'protocol', 'id', 'title', 'severity', 'cveid', 'solution',
-                              'diagnosis', 'result', 'ref_title_1', 'ref_url_1', 'ref_title_2', 'ref_url_2',
-                              'ref_title_3', 'ref_url_3', 'ref_title_4', 'ref_url_4', 'ref_title_5', 'ref_url_5']
 
-                    data = [address, port, protocol, id_vuln, title, severity, cveid, solution, diagnosis, result]
+                    header = ['address', 'port', 'protocol', 'os', 'certainty', 'test_status', 'id',
+                              'title', 'severity',
+                              'cvssScore', 'malware', 'exploit_id', 'exploit_title', 'published', 'added',
+                              'modified', 'riskScore', 'description',
+                              'tags', 'solution']
+
+                    for ref in range(len(ref_header_url)):
+                        header.append(ref_header_titulo[ref])
+                        header.append(ref_header_url[ref])
+
+                    data = [address, port, protocol, "Sistema Operacional não Cadastrado", "", "",
+                            id_vuln, title, severity, "", "", "", "", '', '', '',
+                            '', diagnosis + " " + result, cveid, solution]
 
                     for ref in range(len(ref_url)):
                         data.append(ref_title[ref])
@@ -452,7 +479,7 @@ for input in os.listdir(directory):
 
                     vulnerability += 1
 
-        resource = '/app/vulnerability/upload/api/{}/'.format(resources[2])
+        resource = '/app/vulnerability/upload/api/{}/'.format(resources[0])
         print("Total QualysGuard (" + input + "):", vulnerability)
         log_file.write("\n\tApontamentos convertidos: {}\n".format(vulnerability))
 
@@ -500,7 +527,8 @@ for input in os.listdir(directory):
     gatPoint = "{}://{}{}".format(protocol, url, resource)
 
     for file_to_export in to_export:
-        log_file.write("\n\tUpload:\n")
+        if file_to_export.split('.')[2] != 'csv':
+            continue
         try:
             print("\nIniciando exportação do arquivo '{}'".format(file_to_export))
             with open(file_to_export, "rb") as export_file:
