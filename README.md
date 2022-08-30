@@ -32,16 +32,13 @@ pip install -r src/requirements.txt
   "bearer": "d3f8666c-a6af-4a94-98b9-f15000000000",
 ```
 
-5. Além disso, é necessário ter os templates do Custom Parser criados no GAT Core e seus nomes respectivamente configurados no arquivo ```src/config.json``` nos campos ```Template_Name```.
+5. Além disso, é necessário ter o template do Custom Parser criados no GAT Core e seu nome configurado no arquivo ```src/config.json``` no campo ```InsightVM_Parser```.
 
 ```json
   "templates":{
-    "NexposeReportV1": "Template_Name",
-    "NexposeReportV2": "Template_Name",
-    "QualysGuard": "Template_Name"
+    "InsightVM": "InsightVM_Parser"
   }
 ```
-
 
 ## Features
 
